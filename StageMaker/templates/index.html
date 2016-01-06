@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>Stone Runner Stage Maker v1.0</title>
+         <link rel="icon" type="image/x-icon" href="/static/runner.ico" />
+        <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet" />
+        <script type="text/javascript" src="/static/Libs/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="/static/Libs/mustache.js"></script>
+        <script type="text/javascript">
+            window.DATA={{data_array|safe}};
+        </script>
+        <style type="text/css">
+            body {
+                margin:10px;
+            }
+            tbody tr {
+                -webkit-transition: background 0.03s ease-in
+            }
+            tbody tr:hover{
+                background:#eee;
+                
+            }
+
+            #main_table{
+                margin: 20px;
+                width: 90%
+            }
+            thead tr {
+                background:#aac8e5
+            }
+
+             
+        </style>
+    </head>
+    <body>
+        
+        <h1>Stage Manager </h1>
+         <a id="underTexting" type="button" class="btn  btn-lg   go-back-btn  btn-danger  "    style="  position:absolute  ; z-index:30; right:130px; top:30px">重置测试状态</a>
+        <table id="main_table" class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>编号</td>
+                    <td>名称</td>
+                    <td>KEY</td>
+                    <td>管卡数量</td>
+                    <td>修改时间</td>
+                    <td>操作+</td>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+
+        <script>
+            var t_html=$.get("/static/template/StageMainRow.html",function(txt){
+                var html=Mustache.render(txt, DATA);
+                $("#main_table tbody").append(html);
+            })
+            
+            $("#underTexting").bind("click",function(){
+                $.get("/ResetTestStatus/",function(){
+                    alert("已重置");
+                
+                });
+            
+            
+            });
+        </script>
+    </body>
+</html>

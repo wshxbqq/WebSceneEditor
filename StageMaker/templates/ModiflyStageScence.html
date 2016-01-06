@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Stone Runner Stage Maker v1.0</title>
+<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet" />
+<script type="text/javascript" src="/static/Libs/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/static/Libs/mustache.js"></script>
+    <script type="text/javascript" src="/static/Libs/underscore-min.js"></script>
+   
+<link href="/static/css/stageEditor.css" rel="stylesheet" />
+    <script>
+
+        window.STAGEID = {{STAGEID|safe}};
+       
+        window.JSON_DATA={{jsonData|safe}};
+
+        window.StageScence_title="{{StageScence_title|safe}}";
+
+        window.isUnderTesting={{StageScence_underTesting|safe}};
+    </script>
+</head>
+<body>
+        <div   id="config_current_item_panel">
+       <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label for="rotate_c" class="col-sm-2 control-label">rotate</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="rotate_c" placeholder="rotate">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="ScaleX_c" class="col-sm-2 control-label">ScaleX</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="ScaleX_c" placeholder="ScaleX">
+            </div>
+          </div>
+
+           <div class="form-group">
+            <label for="ScaleY_c" class="col-sm-2 control-label">ScaleY</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="ScaleY_c" placeholder="ScaleY">
+            </div>
+          </div>
+
+           <div class="form-group">
+            <label for="skewX_c" class="col-sm-2 control-label">skewX</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="skewX_c" placeholder="skewX">
+            </div>
+          </div>
+
+           <div class="form-group">
+            <label for="skewY_c" class="col-sm-2 control-label">skewY</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="skewY_c" placeholder="skewY">
+            </div>
+          </div>
+           
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <a   class="btn btn-success" id="transform_ok_btn">确定</a>
+                 <a   class="btn btn-default" id="transform_close_btn">关闭</a>
+            </div>
+          </div>
+        </form>
+    </div>    
+    <div class="title-control-bar">
+       <a id="underTexting_btn" type="button" class="btn  btn-lg   go-back-btn  btn-danger"    style="position:fixed;z-index:30; right:330px; top:20px">测试</a>
+       <a id="cfg_btn_1" type="button" class="btn btn-info btn-lg   go-back-btn"    style="position:fixed;z-index:30; right:230px; top:20px">设置</a>
+       <a id="save_btn" type="button" class="btn btn-info btn-lg   go-back-btn"    style="position:fixed;z-index:30; right:130px; top:20px">保存</a>
+       <a  onclick="history.back()" type="button" class="btn btn-info btn-lg   go-back-btn"    style="position:fixed;z-index:30; right:30px; top:20px">返回</a>
+    </div>
+   <div style="position:fixed;height:200px; width:100%; z-index:10; background:#fff;  display:none  ">
+    <h1>Stage Generate v 1.0 </h1> 
+    <hr  style="border-top:1px solid #000; "  />
+ </div>
+<div class="row">
+  <div  id="left-item-container" class="col-md-5" style="width:700px;height:960px">
+      <div id="main-stage-editor" class="main-stage-editor">
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+  </div>
+  <div id="right-item-list-container"  class="col-md-5" style="width:1000px">
+     <div class="control-bar"></div>
+  	  	<div id="right-item-list" class="row runner-item-list"  >
+         	<ul class="thumbnails" id="item-container">
+            </ul>
+  	    </div>
+  </div>
+ 
+</div>
+     <div id="save_scence_modal" class="modal fade">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			        <h4 class="modal-title">保存</h4>
+			      </div>
+			      <div class="modal-body">
+			         <form class="form-horizontal" role="form">
+						  <div class="form-group">
+						    <label for="scence_name" class="col-sm-4 control-label">输入场景名：</label>
+						    <div class="col-sm-6">
+						      <input type="text" class="form-control" id="scence_name" placeholder="场景名">
+						    </div>
+						  </div>
+
+						</form>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			        <button id="save_scence_btn" type="button" data-loading-text="通信中。"  class="btn btn-success">保存</button>
+			      </div>
+			    </div><!-- /.modal-content -->
+			  </div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+
+          <div id="config_modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">设置窗口</h4>
+      </div>
+      <div class="modal-body">
+
+
+        <div class="form-group">
+            <label for="skewY_c" class="col-sm-2 control-label">场景宽度</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="scence_width_txt" placeholder="width">
+            </div>
+          </div>
+
+             <div class="form-group">
+            <label for="skewY_c" class="col-sm-2 control-label">场景高度</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="scence_height_txt" placeholder="height">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="grid_switch_btn"> 栅格开关
+                </label>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary" id="change_size_btn_ok">确定</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+    
+
+    <script>
+        document.onkeydown = function (e) { console.log(String.fromCharCode(e.keyCode).toLowerCase()); }
+        window.ITEM_ARRAY = [];
+    </script>
+    <script type="text/javascript" src="/static/bootstrap/js_libs/bootstrap.js"></script>
+     <script data-main="/static/stageEditor/main.js"  src="/static/Libs/require.js"></script>
+     <script type="text/javascript" src="/static/stageEditor/page.js" ></script>
+
+
+    <script>
+        function setTestText(){
+            if(window.isUnderTesting){
+                $("#underTexting_btn").html("测试中，测试完毕后请再次点击我，还原状态");
+            }else{
+                $("#underTexting_btn").html("点击测试");
+            }
+        }
+        
+        setTestText();
+        $("#underTexting_btn").on("click",function(e){
+            $.get("/UpdateTestStatus/"+window.STAGEID+"/",function(data){
+                window.isUnderTesting=JSON.parse(data);
+                setTestText();
+            });
+        
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Stone List for {{title}}</title>
+<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet" />
+<script type="text/javascript" src="/static/Libs/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/static/Libs/mustache.js"></script>
+<script type="text/javascript">
+     window.DATA={{data_array|safe}}
+</script>
+		<style type="text/css">
+             body {
+                margin:10px;
+            }
+             tbody tr {
+                -webkit-transition: background 0.03s ease-in
+            }
+            tbody tr:hover{
+                background:#eee;
+                
+            }
+
+            #main_table{
+                margin: 20px;
+                width: 90%
+            }
+            thead tr {
+                background:#aac8e5
+            }
+           
+            #main_table{
+                margin: 20px;
+                width: 90%
+            }
+		    .add-stage-btn {
+		        margin-right:10%;
+            }
+		    .go-back-btn {
+		         margin-right:10px;
+            }
+        </style>
+</head>
+<body>
+	<h1>{{text}}    <a type="button" class="btn btn-primary btn-lg pull-right add-stage-btn" href="/AddStageScence/{{StageScenceDiffcult_id}}/">新增</a>
+        <a type="button" class="btn btn-info btn-lg pull-right go-back-btn"  onclick="history.back()">返回</a>
+	    </h1>
+	<table id="main_table" class="table table-bordered">
+        <thead>
+            <tr>
+                <td>编号</td>
+                <td>标题</td>
+                <td>说明 注释</td>
+                <td>修改时间</td>
+                <td>操作+</td>
+            </tr>
+            </thead>
+        <tbody>
+
+
+        </tbody>
+    </table>
+
+          <div class="modal fade">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			        <h4 class="modal-title">确认删除</h4>
+			      </div>
+			      <div class="modal-body">
+			         <form class="form-horizontal" role="form">
+						  <div class="form-group">
+						    <label for="inputEmail3" class="col-sm-4 control-label">输入密码：</label>
+						    <div class="col-sm-6">
+						      <input type="password" class="form-control" id="pwd" placeholder="请输入密码">
+						    </div>
+						  </div>
+
+						</form>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			        <button id="del_btn" type="button" data-loading-text="通信中。"  class="btn btn-danger">删除</button>
+			      </div>
+			    </div><!-- /.modal-content -->
+			  </div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+     
+    <script type="text/template" id="modal">
+        
+
+    </script>
+     <script>
+         window.del_id=null;
+            var t_html=$.get("/static/template/StageListMainRow.html",function(txt){
+                var html=Mustache.render(txt, DATA);
+                $("#main_table tbody").append(html);
+                 $("#main_table a[delete_id]").bind("click",function(){
+                 	resetModal();
+	            	window.del_id=$(this).attr("delete_id");
+	            	$('.modal').modal({
+				    backdrop:true,
+				    keyboard:true,
+				    show:true
+				});
+            });
+            })
+
+           
+
+            $("#del_btn").bind("click",function(){
+                if(window.del_id!==null){
+                	var pwd=$("#pwd").val();
+                	if(!pwd){
+                		alert("需要输入密码")
+                		return;
+                	}
+                	$.get("/DeleteScence/"+window.del_id+"_"+pwd,function(txt){
+                	    if(txt=="1"){
+                	        $('.modal').modal('hide');
+                	        $("#del_btn").button('loading')
+                	        location.reload();
+                	    }else{
+                	        alert("失败！");
+                	    }
+                        
+
+                    });
+            		
+            	}
+            
+            });
+
+            
+ 		function resetModal(){
+			$("#pwd").val("");
+             window.del_id=null;
+ 			$("#del_btn").button('reset')
+ 		}
+      		      
+      </script>
+      <script type="text/javascript" src="/static/bootstrap/js_libs/bootstrap.js"></script>
+</body>
+</html>
