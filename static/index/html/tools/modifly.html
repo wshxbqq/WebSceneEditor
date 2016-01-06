@@ -1,0 +1,118 @@
+<html>
+	<head>
+	
+        <link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet" />
+        <script src="/static/Libs/mustache.js"></script>
+        <script src="/static/ueditor/ueditor.config.js"></script>
+          <script src="/static/ueditor/ueditor.all.min.js"></script>
+        <script src="/static/Libs/jquery-1.7.2.min.js"></script>
+         
+        <style>
+           
+
+        </style>
+	</head>
+
+	<body>
+		 
+		 
+
+            <div class="input-group input-group-lg">
+              <span class="input-group-addon">这里写Title</span>
+              <input type="text"  id="title" class="form-control" placeholder="Title">
+              
+            </div>
+
+			<div class="input-group input-group-lg">
+               <span class="input-group-addon">口令</span>
+              <input type="text"  id="pwd" class="form-control" placeholder="口令">
+              
+            </div>
+
+           
+            <textarea name="myEditor" id="myEditor">这里写你的初始化内容</textarea>
+
+            <!-- Button (Double) -->
+            <div class="control-group">
+              <div class="controls">
+                <button  id="btn" class="btn btn-success">修改</button>
+            	<button  id="del" class="btn btn-success">删除</button>
+              </div>
+            </div>
+
+
+
+
+
+
+
+        <script type="text/javascript" src="/static/Libs/jquery-1.7.2.min.js"></script>
+        <script src="/static/bootstrap/js_libs/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			function GetQueryString(name)
+			{
+				var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+				var r = window.location.search.substr(1).match(reg);
+				if (r!=null) return unescape(r[2]); return null;
+			}
+			window.ed = UE.getEditor('myEditor');
+			window.onload=function(){
+				setTimeout(function(){
+					$.getJSON("/getBlogJson/?id="+GetQueryString("id"),function(obj){
+			    	 
+			    	$("#title").val(obj.blog_title);
+			    	 ed.setContent(obj.data);
+			    });
+
+				},0);
+				
+			    
+			}
+		    
+		   
+		
+
+		    $("#navBar li").click(function (e) {
+		        window.type = $(this).attr("id");
+		        $("#btnTypeSelect").html($(this).find("a").html());
+		    });
+
+
+		    $("#btn").click(function (e) {
+		        $("#btn").remove();
+		        ed.setDisabled();
+		        $.post("/modiflyBlog/", {
+		        	pwd:$("#pwd").val(),
+		            title: $("#title").val(),
+		            text:ed.getContent(),
+		            id:GetQueryString("id")
+
+		        	}, function (e) {
+		            if (e) {
+		                alert('OK')
+		           	 }
+		           
+		       });
+
+
+
+		    });
+
+
+		 $("#del").click(function(e){
+		 		$.post("/delBlog/", {
+		        	pwd:$("#pwd").val(),
+		            id:GetQueryString("id")
+
+		        	}, function (e) {
+		            if (e) {
+		                alert('OK')
+		           	 }
+		           
+		       });
+
+
+		 });
+</script>
+	</body>
+</html>
